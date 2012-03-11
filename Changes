@@ -1,0 +1,129 @@
+Revision history for Perl Node Interface.
+
+0.29  2012-03-xx
+    - pod for PNI::Mo and PNI::Node::Mo
+    - added jquery-ui
+
+0.28  2012-02-28
+    - PNI::Comment now is a node
+    - updated deprecated paths method in PNI::GUI
+
+0.27  2012-02-19
+    - removed view stuff from model
+    - avoid PAUSE indexing for nodes and Mo
+
+0.26  2012-01-31
+    - small bug fixes
+    - removed tests from _finder.t, since they can fail if there are
+      deprecated nodes installed in previous versions.
+
+0.25  2012-01-30
+    - fixed PNI::Node::Perlfunc Keys and Values failing in 0.24.1
+    - can' t version it as 0.24.2 cause there is a problem with indexing:
+      I will try to use the perlmodestyle way for next releases
+    - added versioning policy as in perlmodstyle
+
+0.24.1  2012-01-28
+    - fixed test _file.t failing in 0.23
+
+0.24    2012-01-28
+    - merged with PNI::Node::Perlop and PNI::Node::Perlfunc so now a lot of
+      nodes are included. This will be a great advantage since people will
+      install and the core node with one *natural* command, i.e. cpan PNI.
+    - dummy pni bin
+
+0.23    2012-01-26
+    - there will be only one distro! ;^) merged with PNI::Node::Perlvar,
+      so now Perlvar nodes Basetime, Osname, Perl_version, Process_id
+      are included.
+    - basic structure waiting for PNI::GUI
+
+0.22.1  2012-01-14
+    - added PNI::scen
+    - switched to dep on JSON::PP, now it is core module ;D
+
+0.21.1 2011-12-22
+    - Moooved to Mo, and to github (:
+
+0.19  2011-09-18
+    - PNI::Node::some_input_slot_is_changed 
+    - PNI::Node::has_no_input_slot_changed
+    - PNI::Slot::In::set_data
+    - PNI::Node::PNI::Root
+    - some code cleaning
+
+0.18  2011-08-23
+    - PNI::GUI::Comment
+    - can remove stuff with del_node, del_scenario, del_edge
+    - use parent instead of use base pragma
+    - use Carp in PNI::Error
+
+0.17  2011-07-31
+    - ready for first PNI::GUI::Tk usable version
+    - added PNI::FAQ pod
+    - scenario task calls sub scenarios task
+
+0.16  2011-07-24
+    - fixed bug on id=69733 PNI::Finder blessing
+    - modularized PNI::Node::Perlvar, PNI::Node::Perlop and PNI::Node::Perlfunc
+    - removed source code generation with Template toolkit
+    - various improvements for PNI::GUI::Tk
+    - started code cleaning
+
+0.15  2011-06-21
+    - use PNI ':-D'; # exports node, edge, ..
+    - pod coverage ok
+    - pod files ok
+    - better code templates
+    - PNI::step replaced by PNI::task
+    - PNI::File, load/save scenario
+    - $node->get_ordered_inputs $node->get_ordered_outputs
+    - abstract views: PNI::GUI::Node, PNI::GUI::Edge, PNI::GUI::Scenario
+
+0.14  2011-05-14
+    - PNI::Node::List::Util
+    - PNI::Node::Scalar::Util
+    - PNI subs in lower case
+    - renamed PNI::Link as PNI::Edge ... link is a reserved word so 
+      if I want to export PNI subs I would have node and edge
+    - PNI code uses a template system to auto generate code
+    - PNI::Slot data method returns raw data
+    - PNI::Slot data_ref method
+    - PNI::Slot is_connected
+
+0.12  2011-04-15
+    - more Perlop nodes
+    - Cwd::Getcwd, Scalar::Util::Looks_like_number, List::Util::Max nodes
+    - every node has a test
+    - code generation with Template Toolkit
+    - PNI::RUN renamed in PNI::step
+    - PNI synopsis test
+
+0.11  2011-03-19
+    - added PNI::Error
+    - perlcritic ok
+    - PNI::Node::Tk 0.11
+    - abstract gui and scenario model
+    - scenario items: node and link
+
+0.1   2011-02-01
+    - interface restiling and cleanup
+    - test driven development philosophy, every node has a test
+    - base class PNI::Item
+
+0.05  2010-06-26
+    - fixed failing tests
+    - more nodes and tests
+    - added blog at http://perl-node-interface.blogspot.com/
+
+0.03  2010-05-31
+    - some bug fixing
+    - backported from perl 5.10 to 5.8.8
+
+0.02  2010-05-12
+    - fixed problem about loading nodes
+    - added Perlop::Eq node
+
+0.01  2010-05-07
+    - first minimal release: just works as cpan module :)
+

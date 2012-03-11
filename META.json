@@ -1,0 +1,52 @@
+{
+   "abstract" : "unknown",
+   "author" : [
+      "G. Casati <fibo@cpan.org>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Perl-Node-Interface",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : 0
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : 0
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : 0,
+            "Exporter" : 0,
+            "File::Find" : 0,
+            "File::Spec::Functions" : 0,
+            "File::Temp" : 0,
+            "JSON::PP" : 0,
+            "Module::Pluggable" : 0,
+            "Mojolicious" : 0,
+            "Scalar::Util" : 0,
+            "Test::More" : 0,
+            "Time::HiRes" : 0,
+            "UNIVERSAL::require" : 0
+         }
+      }
+   },
+   "release_status" : "testing",
+   "version" : "0.28_01"
+}
