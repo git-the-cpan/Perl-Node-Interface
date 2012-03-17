@@ -7,7 +7,7 @@ use warnings;
 # considering version x.yy stable, a new release will be versioned
 # as x.yy_zz so it will not be listed by CPAN.pm as the last.
 # After test results will be ok, it can be officially released x.(yy+1) version.
-our $VERSION = '0.28_01';
+our $VERSION = '0.29';
 $VERSION = eval $VERSION;
 
 use Exporter 'import';
@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-PNI - Perl Node Interface
+PNI - stands for Perl Node Interface
 
 =head1 ATTENTION
 
@@ -166,6 +166,8 @@ L<PNI blog|http://perl-node-interface.blogspot.com>
 L<PNI repository|http://github.com/fibo/pni-pm>
 
 L<PNI Class Diagram|http://goo.gl/MQ89f>
+
+L<PNI node coverage|http://goo.gl/hfAoU>
 
 =head1 AUTHOR
 
