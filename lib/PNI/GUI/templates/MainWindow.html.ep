@@ -9,17 +9,48 @@
   <!-- Load external JavaScript libs.  -->
    <SCRIPT src="js/jquery-1.7.1.min.js" type="text/javascript" ></SCRIPT>
    <SCRIPT src="js/jquery-ui-1.8.18.custom.min.js" type="text/javascript" ></SCRIPT>
+   <SCRIPT src="js/kinetic-v3.8.5.min.js" type="text/javascript" ></SCRIPT>
   <!-- Load internal JavaScript libs.  -->
    <SCRIPT src="js/pni.js" type="text/javascript" ></SCRIPT>
   <!-- Resource onload.js should be last JavaScript loaded.  -->
    <SCRIPT src="js/onload.js" type="text/javascript" ></SCRIPT>
  </HEAD>
- <BODY>
+ <BODY onmousedown="return false;">
   <DIV id="container">
+   <DIV id="accordion">
+    <H3><A href="#">Scenarios</A></H3>
+     <DIV>
+<p>
+TODO: metti qui un albero con tutti gli scenari aperti partendo dalla root.
+Metti anche il link per aprire il corrispondente tab delle scenario scenario. 
+TODO: crea una apposita classe JavaScript ScenarioBrowser ... analogamente fai anche NodeBrowser nell' altro accordion, con il drag and drop
+</p>
+     </DIV>
+
+<h3><a href="#">Nodes</a></h3>
+<div>
+<p>
+Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+suscipit faucibus urna.
+</p>
+</div>
+<h3><a href="#">Inspector</a></h3>
+<div>
+<p>
+Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+suscipit faucibus urna.
+</p>
+</div>
+
+   </DIV> <!-- accordion -->
    <DIV id="tabs">
     <UL>
-     <LI> <A href="#dashboard-tab">Dashboard</A> </LI>
      <LI> <A href="#scenario-tab">Scenario</A> </LI>
+	 <!-- TODO metti la dashboard per prima --><LI> <A href="#dashboard-tab">Dashboard</A> </LI>
     </UL>
     <DIV id="dashboard-tab">
      <P>Welcome to Perl Node Interface!</P>
@@ -28,17 +59,16 @@
       <LI> <A href="http://search.cpan.org/~fibo/PNI/">PNI on CPAN</A> </LI>
       <LI> <A href="http://perl-node-interface.blogspot.com">PNI blog</A> </LI>
       <LI> <A href="https://github.com/fibo/pni-pm">PNI repo</A> </LI>
-      <LI>
-       <DIV class="ui-widget">
-        <LABEL for="node-list">Available nodes: </LABEL>
-        <INPUT id="node-list">
-       </DIV>
-      </LI>
     </UL>
     </DIV> <!-- dashboard-tab -->
     <DIV id="scenario-tab">
-     <CANVAS id="scenario-canvas">Opss ... your browser does not support canvas :(</CANVAS>
-    </DIV> <!-- scenario-canvas -->
+     <DIV id="scenario-container">
+      <DIV id="node-selector-container" class="ui-widget">
+       <INPUT id="node-selector-input">
+      </DIV> <!-- node-selector-container -->
+      <!-- Canvas created by Kinect.js here -->
+     </DIV> <!-- scenario-container -->
+    </DIV> <!-- scenario-tab -->
    </DIV> <!-- tabs -->
   </DIV> <!-- container -->
  </BODY>

@@ -1,10 +1,12 @@
 package PNI::Elem;
 use PNI::Mo;
+
 use Scalar::Util;
 
 has id => ( default => sub { Scalar::Util::refaddr(shift) } );
 
-1
+1;
+
 __END__
 
 =head1 NAME

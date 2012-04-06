@@ -1,5 +1,6 @@
 package PNI::Finder;
 use PNI::Mo;
+
 use File::Basename;
 use File::Find;
 use File::Spec;
@@ -8,10 +9,9 @@ use Module::Pluggable
   require     => 1,
   inner       => 0;
 
-my $PNI_dir = File::Basename::dirname(__FILE__);
-my $PNI_Scenario_dir = File::Spec->catfile($PNI_dir,'Scenario');
+my $pni_dir = File::Basename::dirname(__FILE__);
+my $pni_scenario_dir = File::Spec->catfile( $pni_dir, 'Scenario' );
 
-# return @nodes : PNI::Node
 sub nodes {
     my @nodes = grep { $_->isa('PNI::Node') } shift->plugins;
 
@@ -31,13 +31,14 @@ sub files {
             },
             no_chdir => 1,
         },
-        $PNI_Scenario_dir
+        $pni_scenario_dir
     );
 
     return @pni_files;
 }
 
-1
+1;
+
 __END__
 
 =head1 NAME
@@ -54,9 +55,13 @@ PNI::Finder - searches for available nodes
 
 =head2 files
 
+    my @pni_files = $find->files;
+
+Returns a list of available .pni files, i.e. serialized scenarios.
+
 =head2 nodes
 
-    $find->nodes
+    my @node_list = $find->nodes;
 
 Returns a list of available PNI nodes, i.e. every package under the PNI::Node
 namespace that is a valid PNI::Node, minus the leading 'PNI::Node::' string.

@@ -17,6 +17,7 @@ has file => ( default => sub { PNI::File->new } );
 
 sub add_edge {
     my $self = shift;
+
     my $edge = PNI::Edge->new(@_);
     return $self->edges->add($edge);
 }
@@ -31,14 +32,15 @@ sub add_node {
 
         my $node_class = "PNI::Node::$type";
 
-        # Code to require a node, before using UNIVERSAL::required looked like this.
-        #        my $node_path  = "$node_class.pm";
-        #        $node_path =~ s/::/\//g;
-        #        eval { require $node_path };
-
         $node_class->require or return;
 
-        $node = $node_class->new( father => $self );
+     # TODO: Set input data, if any
+     #while ( my ( $slot_name, $slot_data ) = each %{ $arg->{inputs} or {} } ) {
+     #    $node->get_input($slot_name)->set_data($slot_data);
+     #}
+
+        $node = $node_class->new( father => $self, type => $type, @_ );
+
     }
     else {
 
@@ -47,42 +49,41 @@ sub add_node {
 
     }
 
-    # TODO: Set input data, if any
-    #while ( my ( $slot_name, $slot_data ) = each %{ $arg->{inputs} or {} } ) {
-    #    $node->get_input($slot_name)->set_data($slot_data);
-    #}
-
     return $self->nodes->add($node);
 }
 
 sub add_scenario {
-    my $self     = shift;
+    my $self = shift;
+
     my $scenario = PNI::Scenario->new(@_);
     return $self->scenarios->add($scenario);
 }
 
 sub del_edge {
     my $self = shift;
+
     my $edge = shift or return;
 
     $edge->source->edges->del($edge);
     $edge->target->edge(undef);
 
-    $self->edges->del($edge);
+    return $self->edges->del($edge);
 }
 
 sub del_node {
     my $self = shift;
+
     my $node = shift or return;
 
     $self->del_edge($_) for $node->get_ins_edges;
     $self->del_edge($_) for $node->get_outs_edges;
 
-    $self->nodes->del($node);
+    return $self->nodes->del($node);
 }
 
 sub del_scenario {
     my $self = shift;
+
     my $scenario = shift or return;
 
     # Clean up all items contained in the scenario.
@@ -92,7 +93,7 @@ sub del_scenario {
 
     $scenario->del_scenario($_) for $scenario->scenarios->list;
 
-    $self->scenarios->del($scenario);
+    return $self->scenarios->del($scenario);
 }
 
 sub task {
@@ -156,10 +157,31 @@ sub task {
     # Finally, run all sub scenarios tasks.
     $_->task for ( $self->scenarios->list );
 
+    # TODO dovrei mettere un return piu significativo tipo return $self->ok
     return 1;
 }
 
-1
+# TODO this method is EXPERIMENTAL, needs tests and code cleaning.
+sub to_hash {
+    my $self = shift;
+
+    my $nodes_list = [];
+    for my $node ( $self->nodes->list ) {
+        push @{$nodes_list}, $node->to_hash;
+    }
+
+    # TODO prima dovrei prendere il SUPER to_hash
+    # ad esempio PNI::Elem to_hash mi da l' id.
+    return {
+        id        => $self->id,
+        nodes     => $nodes_list,
+        edges     => 0,
+        scenarios => 0,
+    };
+}
+
+1;
+
 __END__
 
 =head1 NAME
@@ -173,34 +195,48 @@ PNI::Scenario - is a set of nodes connected by edges
     $standalone_scenario = PNI::Scenario->new;
 
     # ... but it will not belong to PNI hierarchy tree,
-    # so its task method will not be called.
+    # so its task method will not be called, unless you call it.
+    $standalone_scenario->task;
 
     # You can start adding a scenario to the PNI root.
     use PNI;
-    my $scen1 = PNI::root->add_scenario;
-    my $scen2 = $scenario->add_scenario;
+    my $scenario = PNI::root->add_scenario;
 
-    my $foo = $scen2->add_node('Foo');
-    my $bar = $scen2->add_node('Bar');
-    $scen2->add_edge( $foo => $bar, 'out' => 'in' );
+    # Add two nodes.
+    my $foo = $scenario->add_node('Foo');
+    my $bar = $scenario->add_node('Bar');
+
+    # Connect nodes with an edge.
+    $scenario->add_edge( $foo => $bar, 'out' => 'in' );
+
+    # Calling PNI task method will execute all the tasks once.
+    PNI::task;
+
+    # Or call PNI loop to keep it running.
+    PNI::loop;
+
+
+=head1 DESCRIPTION
+
+A scenario is a directed graph of subs called C<task>.
 
 =head1 ATTRIBUTES
 
 =head2 edges
 
-    my @edges = $self->edges->list;
+    my @edges = $scenario->edges->list;
 
 A L<PNI::Set> containing <PNI::Edge>s.
 
 =head2 nodes
 
-    my @nodes = $self->nodes->list;
+    my @nodes = $scenario->nodes->list;
 
 A L<PNI::Set> containing <PNI::Node>s.
 
 =head2 scenarios
 
-    my @scenarios = $self->scenarios->list;
+    my @scenarios = $scenario->scenarios->list;
 
 A L<PNI::Set> containing <PNI::Scenario>s.
 
@@ -212,6 +248,8 @@ A L<PNI::Set> containing <PNI::Scenario>s.
 
 =head2 add_scenario
 
+    $sub_scenario = $scenario->add_scenario;
+
 =head2 del_edge
 
 =head2 del_node
@@ -219,6 +257,15 @@ A L<PNI::Set> containing <PNI::Scenario>s.
 =head2 del_scenario
 
 =head2 task
+
+    $scen->task;
+
+Probably the most important PNI method. The task of a scenario is to trigger 
+every node (and scenario) it contains to run its own task, following the natural order.
+
+=head2 to_hash
+
+    my $data_hashref = $scen->to_hash;
 
 =cut
 

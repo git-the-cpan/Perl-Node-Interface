@@ -1,6 +1,7 @@
 package PNI::Node;
 use PNI::Mo;
 extends 'PNI::Elem';
+
 use PNI::In;
 use PNI::Out;
 use PNI::Set;
@@ -9,16 +10,24 @@ has _on => ( default => sub { 1 } );
 
 has father => ( default => sub { 0 } );
 has ins    => ( default => sub { PNI::Set->new } );
-has label  => ( default => sub { '' } );
+has label  => ();
 has outs   => ( default => sub { PNI::Set->new } );
-has type   => ( default => sub { __PACKAGE__ } );
+has type   => ();
+
+# TODO documenta  aggiungi test per x e y: anche se sono attributi grafici devo metterli nel model
+#       per fare in modo che in futuro un' altra persona che sta editando la patch possa
+#       vedere i cambiamenti, cioe che sia collaborativa, questo perchè il controller potrebbe interrogare
+#       un' istanza di PNI su un' altra macchina ... AD OGNI MODO RISULTA PIU FACILE COSI (mi sembra anche piu logico ... cosa diranno
+#       i puristi dei pattern ? :)
+has x => ();
+has y => ();
 
 sub get_outs_edges {
-    map { $_->edges->list } shift->outs->list;
+    return map { $_->edges->list } shift->outs->list;
 }
 
 sub get_ins_edges {
-    grep { defined } map { $_->edge } shift->ins->list;
+    return grep { defined } map { $_->edge } shift->ins->list;
 }
 
 sub in {
@@ -37,13 +46,13 @@ sub in {
       );
 }
 
-sub is_off { !shift->_on }
+sub is_off { return !shift->_on; }
 
-sub is_on { shift->_on }
+sub is_on { return shift->_on; }
 
-sub off { shift->_on(0) }
+sub off { return shift->_on(0); }
 
-sub on { shift->_on(1) }
+sub on { return shift->_on(1); }
 
 sub out {
     my $self = shift;
@@ -62,11 +71,11 @@ sub out {
 }
 
 sub parents {
-    map { $_->node } map { $_->source } shift->get_ins_edges;
+    return map { $_->node } map { $_->source } shift->get_ins_edges;
 }
 
 # This method is abstract.
-sub task { 1 }
+sub task { die; }
 
 # TODO this method is EXPERIMENTAL, needs tests and code cleaning.
 sub to_hash {
@@ -77,16 +86,24 @@ sub to_hash {
         push @ins_list, $in->id;
     }
 
+    my @outs_list;
+    for my $out ( $self->outs->list ) {
+        push @outs_list, $out->id;
+    }
+
     return {
         id    => $self->id,
         label => $self->label,
         type  => $self->type,
         ins   => \@ins_list,
-        outs  => 0,
+        outs  => \@outs_list,
+        x     => $self->x,
+        y     => $self->y,
     };
 }
 
-1
+1;
+
 __END__
 
 =head1 NAME
@@ -123,11 +140,15 @@ Returns C<father> scenario.
 
 =head2 ins
 
+    my @ins = $node->ins->list;
+
 Holds a L<PNI::Set> of <PNI::In>.
 
 =head2 label
 
 =head2 outs
+
+    my @outs = $node->outs->list;
 
 Holds a L<PNI::Set> of <PNI::Out>.
 
@@ -137,9 +158,13 @@ Holds a L<PNI::Set> of <PNI::Out>.
 
 =head2 get_ins_edges
 
+    my @ins_edges = $node->get_ins_edges;
+
 Returns a list of all L<PNI::Edge> connected to node C<ins>.
 
 =head2 get_outs_edges
+
+    my @outs_edges = $node->get_outs_edges;
 
 Returns a list of all L<PNI::Edge> connected to node C<outs>.
 
@@ -217,7 +242,7 @@ It is the chunk of code that the node implements.
 
 =head2 to_hash
 
-    my $node_hashref = $node->to_hash;
+    my $data_hashref = $node->to_hash;
 
 =cut
 

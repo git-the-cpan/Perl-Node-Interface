@@ -7,7 +7,7 @@ use warnings;
 # considering version x.yy stable, a new release will be versioned
 # as x.yy_zz so it will not be listed by CPAN.pm as the last.
 # After test results will be ok, it can be officially released x.(yy+1) version.
-our $VERSION = '0.29';
+our $VERSION = '0.29_01';
 $VERSION = eval $VERSION;
 
 use Exporter 'import';
@@ -16,6 +16,14 @@ use PNI::Finder;
 use PNI::Node;
 use PNI::Scenario;
 use Time::HiRes;
+
+# TODO fai PNI::Guides::Scripting dove spieghi
+# use PNI ':-D' ... vedi se meglio fare use PNI ':-)' o tutti e due e anche :^) , use PNI '::'
+# ma vedi anche se puoi esportare n e s r l invece di node edge scen root loop
+# e poi spieghi che usi solo la root e ti viene fuori uno script che gia si puo lanciare
+# ed usi tutti i nodi
+#
+# poi fai la parte avanzata dove spieghi che in realta si potrebbe usare tutto ... ma perche' non usare la GUI (dici alla fine)
 
 # Smiling is better (:
 our @EXPORT_OK = qw( edge node task );
@@ -28,13 +36,17 @@ my $find = PNI::Finder->new;
 my $root = PNI::Scenario->new;
 
 sub edge {
-    my $source_node     = shift;
-    my $target_node     = shift;
-    my $source_out_name = shift;
-    my $target_in_name  = shift;
+    my $source_node   = shift;
+    my $target_node   = shift;
+    my $source_out_id = shift;
+    my $target_in_id  = shift;
 
-    my $source_out = $source_node->out($source_out_name);
-    my $target_in  = $target_node->in($target_in_name);
+    # TODO POTENZIALMENTE PERICOLOSO !!!!!
+    # se gli slot non esistono li creerebbe
+    # considera se usare una cosa del tipo
+    # my $source_out = $source_node->outs->elem->{$source_out_id};
+    my $source_out = $source_node->out($source_out_id);
+    my $target_in  = $target_node->in($target_in_id);
 
     return $root->add_edge(
         source => $source_out,
@@ -42,36 +54,35 @@ sub edge {
     );
 }
 
-sub files { $find->files }
+sub files { return $find->files }
 
 sub loop {
+
     while (1) {
         &task;
         Time::HiRes::usleep(1);
     }
+
+    return;
 }
 
-sub node { $root->add_node(@_) }
+sub node { return $root->add_node(@_); }
 
-sub node_list { $find->nodes }
+sub node_list { return $find->nodes; }
 
-sub root { $root }
+sub root { return $root; }
 
-sub scen { $root->add_scenario }
+sub scen { return $root->add_scenario; }
 
-sub task { $root->task }
+sub task { return $root->task; }
 
-1
+1;
+
 __END__
 
 =head1 NAME
 
 PNI - stands for Perl Node Interface
-
-=head1 ATTENTION
-
-The Perl Node Interface was created to be used via browser,
-anyway you are free to use the scripting api if it does make sense.
 
 =head1 SYNOPSIS
 
@@ -89,7 +100,7 @@ It is my main project, my contribution to the great Perl community. Node program
 
 Think about genetic researchers, for example. They need to focus on protein chains, not on what a package is. Maybe they can do an extra effort and say the world "variable" or "string" or even "regular expression" and that makes them proud, but they don't care about inheritance.
 
-They want things working and they need Perl ... but if you say Strawberry they think about yogurt, not about Windows.
+They want things working and they need Perl ... but if you say L<Strawberry|http://strawberryperl.com/> they think about yogurt, not about Windows.
 
 There are a lot of node programming languages (L<VVVV|http://vvvv.org/>, L<Puredata|http://puredata.info/>, L<Max/Msp|http://cycling74.com/>) but normally they target artists and interaction designers. I saw a lot of vjs and musicians do really complex programs with those software, and they never wrote a line of code.
 
@@ -115,6 +126,12 @@ Connects an output of a node to an input of another node.
 
 Returns a list of all .pni files in PNI.pm install dir and subdirs.
 
+=head2 loop
+
+    PNI::loop;
+
+Starts the PNI main loop. It keeps calling C<task> as fast as it can.
+
 =head2 node
 
     # Load PNI::Node::Foo::Bar node. 
@@ -123,10 +140,10 @@ Returns a list of all .pni files in PNI.pm install dir and subdirs.
 Creates a node by its PNI type, that is the name of a package under the
 PNI::Node namespace, and adds it to the root scenario.
 
-    # No PNI type returns an empty node.
-    my $node = PNI::node;
-    
-PNI creates an empty node.
+
+    my $empty_node = PNI::node;
+
+If no type is provided, PNI creates an empty node.
 
 =head2 node_list
 
@@ -135,12 +152,6 @@ PNI creates an empty node.
 Returns a list of available PNI nodes.
 
 This method delegates to L<PNI::Finder> C<nodes> method.
-
-=head2 loop
-
-    PNI::loop;
-
-Starts the PNI main loop. It keeps calling C<task> as fast as it can.
 
 =head2 root
 
@@ -152,6 +163,8 @@ Returns the root PNI::Scenario.
 
     my $scen = PNI::scen;
 
+Creates a brand new sub scenario of the root scenario.
+
 =head2 task
 
     PNI::task;
@@ -161,11 +174,13 @@ This method delegates to the root scenario task method.
 
 =head1 SEE ALSO
 
+L<PNI::Guides>
+
 L<PNI blog|http://perl-node-interface.blogspot.com>
 
 L<PNI repository|http://github.com/fibo/pni-pm>
 
-L<PNI Class Diagram|http://goo.gl/MQ89f>
+L<PNI class diagram|http://goo.gl/MQ89f>
 
 L<PNI node coverage|http://goo.gl/hfAoU>
 

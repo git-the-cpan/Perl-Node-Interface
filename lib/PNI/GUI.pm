@@ -9,8 +9,6 @@ use PNI;
 sub startup {
     my $self = shift;
 
-# TODO: $self->secret( $ENV{PNIGUI_SECRET} ); and document env var as well as MOJO_MODE
-
     $self->home->parse( catdir( dirname(__FILE__), 'GUI' ) );
     $self->static->paths->[0]   = $self->home->rel_dir('public');
     $self->renderer->paths->[0] = $self->home->rel_dir('templates');
@@ -23,16 +21,17 @@ sub startup {
             shift->render_json( [ PNI->node_list ] );
         }
     );
-    $r->get('/add_node')->to(
-        cb => sub {
-            my $self=shift;
-            my $node = PNI::node $self->req->param('type');
-            $self->render_json( $node->to_hash );
-        }
-    );
+
+    $r->get('/scenario/root/add_edge')->to('scenario#add_edge');
+    $r->get('/scenario/root/add_node')->to('scenario#add_node');
+    $r->get('/scenario/root')->to('scenario#to_json');
+
+    # TODO $r->get('/scenario/:id/add_node')->to('scenario#add_node');
+
 }
 
-1
+1;
+
 __END__
 
 =head1 NAME

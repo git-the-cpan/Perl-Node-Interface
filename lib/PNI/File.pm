@@ -1,5 +1,6 @@
 package PNI::File;
 use PNI::Mo;
+
 use File::Spec;
 use File::Temp;
 use JSON::PP;
@@ -17,9 +18,10 @@ has path => (
         close $fh;
 
         return $path;
-      }
+    }
 );
 
+# TODO change this sub name: read is a builtin
 sub read {
     my $self = shift;
 
@@ -28,6 +30,9 @@ sub read {
     my $text = <$fh>;
     $self->content( decode_json($text) );
     close $fh;
+
+    # TODO should return something more useful
+    return 1;
 }
 
 sub write {
@@ -36,9 +41,13 @@ sub write {
     open my $fh, '>', $self->path;
     print $fh encode_json( $self->content );
     close $fh;
+
+    # TODO should return something more useful
+    return 1;
 }
 
-1
+1;
+
 __END__
 
 =head1 NAME

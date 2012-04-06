@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use PNI::Scenario;
-use Test::More tests => 26;
+use Test::More tests => 27;
 
 my $scenario = PNI::Scenario->new;
 isa_ok $scenario, 'PNI::Scenario';
@@ -57,6 +57,8 @@ my $n1 = $scen->add_node('Twice');
 my $n2 = $scen->add_node('Twice');
 my $n3 = $scen->add_node('Twice');
 my $n4 = $scen->add_node('Twice');
+
+is $n1->type, 'Twice', 'node type';
 
 my $i1 = $n1->in;
 my $o1 = $n1->out;

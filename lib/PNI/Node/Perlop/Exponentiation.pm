@@ -5,6 +5,7 @@ extends 'PNI::Node';
 
 sub BUILD {
     my $self = shift;
+    $self->label('exp');
 
     $self->in(1);
     $self->in(2);
@@ -22,4 +23,5 @@ sub task {
     $self->out->data( $in1->data**$in2->data );
 }
 
-1
+1;
+
