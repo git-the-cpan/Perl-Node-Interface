@@ -42,6 +42,11 @@ lib/PNI/Node.pm
 lib/PNI/Node/File/Spec/Catfile.pm
 lib/PNI/Node/File/Spec/Devnull.pm
 lib/PNI/Node/File/Spec/Tmpdir.pm
+lib/PNI/Node/List/Util/Max.pm
+lib/PNI/Node/List/Util/Maxstr.pm
+lib/PNI/Node/List/Util/Min.pm
+lib/PNI/Node/List/Util/Minstr.pm
+lib/PNI/Node/List/Util/Sum.pm
 lib/PNI/Node/Mo.pm
 lib/PNI/Node/Perlfunc/Cos.pm
 lib/PNI/Node/Perlfunc/Exp.pm
@@ -76,6 +81,7 @@ lib/PNI/Node/Perlvar/Osname.pm
 lib/PNI/Node/Perlvar/Perl_version.pm
 lib/PNI/Node/Perlvar/Process_id.pm
 lib/PNI/Node/PNI/Comment.pm
+lib/PNI/Node/PNI/Node.pm
 lib/PNI/Node/PNI/Root.pm
 lib/PNI/Node/PNI/Scenario.pm
 lib/PNI/Node/Scalar/Util/Blessed.pm
@@ -110,6 +116,11 @@ t/no_PAUSE_indexing.t
 t/node/file-spec-catfile.t
 t/node/file-spec-devnull.t
 t/node/file-spec-tmpdir.t
+t/node/list-util-max.t
+t/node/list-util-maxstr.t
+t/node/list-util-min.t
+t/node/list-util-minstr.t
+t/node/list-util-sum.t
 t/node/perlfunc-cos.t
 t/node/perlfunc-exp.t
 t/node/perlfunc-int.t
@@ -143,6 +154,7 @@ t/node/perlvar-osname.t
 t/node/perlvar-perl_version.t
 t/node/perlvar-process_id.t
 t/node/pni-comment.t
+t/node/pni-node.t
 t/node/pni-root.t
 t/node/pni-scenario.t
 t/node/scalar-util-blessed.t

@@ -39,6 +39,7 @@
             "File::Spec::Functions" : 0,
             "File::Temp" : 0,
             "JSON::PP" : 0,
+            "List::Util" : 0,
             "Module::Pluggable" : 0,
             "Mojolicious" : 0,
             "Scalar::Util" : 0,
@@ -48,6 +49,6 @@
          }
       }
    },
-   "release_status" : "testing",
-   "version" : "0.29_01"
+   "release_status" : "stable",
+   "version" : "0.30"
 }

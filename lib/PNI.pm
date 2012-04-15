@@ -7,7 +7,7 @@ use warnings;
 # considering version x.yy stable, a new release will be versioned
 # as x.yy_zz so it will not be listed by CPAN.pm as the last.
 # After test results will be ok, it can be officially released x.(yy+1) version.
-our $VERSION = '0.29_01';
+our $VERSION = '0.30';
 $VERSION = eval $VERSION;
 
 use Exporter 'import';
@@ -27,7 +27,7 @@ use Time::HiRes;
 
 # Smiling is better (:
 our @EXPORT_OK = qw( edge node task );
-our %EXPORT_TAGS = ( '-D' => \@EXPORT_OK );
+our %EXPORT_TAGS = ( 'root' => \@EXPORT_OK );
 
 # A PNI finder.
 my $find = PNI::Finder->new;
@@ -177,6 +177,8 @@ This method delegates to the root scenario task method.
 L<PNI::Guides>
 
 L<PNI blog|http://perl-node-interface.blogspot.com>
+
+L<PNI demo|http://pnidemo-fibo.dotcloud.com>
 
 L<PNI repository|http://github.com/fibo/pni-pm>
 

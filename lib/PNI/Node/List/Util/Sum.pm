@@ -1,13 +1,13 @@
 package    # Avoid PAUSE indexing.
-  PNI::Node::Scalar::Util::Blessed;
+  PNI::Node::List::Util::Sum;
 use PNI::Node::Mo;
 extends 'PNI::Node';
 
-use Scalar::Util;
+use List::Util;
 
 sub BUILD {
     my $self = shift;
-    $self->label('blessed');
+    $self->label('sum');
 
     $self->in;
     $self->out;
@@ -16,7 +16,9 @@ sub BUILD {
 sub task {
     my $self = shift;
 
-    $self->out->data( Scalar::Util::blessed( $self->in->data ) );
+    $self->in->is_array or return $self->off;
+
+    $self->out->data( List::Util::sum( 0, @{ $self->in->data } ) );
 }
 
 1;
