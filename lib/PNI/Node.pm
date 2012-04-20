@@ -8,11 +8,10 @@ use PNI::Set;
 
 has _on => ( default => sub { 1 } );
 
-has father => ( default => sub { 0 } );
-has ins    => ( default => sub { PNI::Set->new } );
-has label  => ();
-has outs   => ( default => sub { PNI::Set->new } );
-has type   => ();
+has ins => ( default => sub { PNI::Set->new } );
+has label => ();
+has outs  => ( default => sub { PNI::Set->new } );
+has type  => ();
 
 # TODO documenta  aggiungi test per x e y: anche se sono attributi grafici devo metterli nel model
 #       per fare in modo che in futuro un' altra persona che sta editando la patch possa
@@ -71,10 +70,6 @@ sub out {
       );
 }
 
-sub parents {
-    return map { $_->node } map { $_->source } shift->get_ins_edges;
-}
-
 # This method is abstract.
 sub task { die; }
 
@@ -114,8 +109,8 @@ PNI::Node - is a basic unit of code
 =head1 SYNOPSIS
 
     # Create a node in a scenario.
-    use PNI;
-    my $scenario = PNI::scen;
+    use PNI::Scenario;
+    my $scen = PNI::Scenario->new;
     my $node = $scenario->add_node( type => 'Foo::Bar' );
 
     # Decorate node, add an input and an output.
@@ -132,12 +127,6 @@ PNI::Node - is a basic unit of code
     my $gold = $out->data;
 
 =head1 ATTRIBUTES
-
-=head2 father
-
-    my $scenario = $node->father;
-    
-Returns C<father> scenario.
 
 =head2 ins
 
@@ -227,12 +216,6 @@ Default output name is 'out', so you can be lazy.
     $node->out('out1'); # ditto
 
 If you pass digit C<x> as output_name, it will be replaced by C<outx>.
-
-=head2 parents
-
-    my @parents = $node->parents;
-
-Returns the list of nodes which C<outs> are connected to this node C<ins>.
 
 =head2 task
 

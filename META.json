@@ -4,7 +4,7 @@
       "G. Casati <fibo@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621",
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "unknown"
    ],
@@ -32,9 +32,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "English" : 0,
-            "Exporter" : 0,
             "File::Find" : 0,
             "File::Spec::Functions" : 0,
             "File::Temp" : 0,
@@ -44,11 +41,10 @@
             "Mojolicious" : 0,
             "Scalar::Util" : 0,
             "Test::More" : 0,
-            "Time::HiRes" : 0,
             "UNIVERSAL::require" : 0
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.30"
+   "version" : "0.31"
 }

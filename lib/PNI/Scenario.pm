@@ -9,11 +9,11 @@ use PNI::Set;
 
 require UNIVERSAL::require;
 
-has edges     => ( default => sub { PNI::Set->new } );
-has nodes     => ( default => sub { PNI::Set->new } );
-has scenarios => ( default => sub { PNI::Set->new } );
+has edges     => ( default => sub { PNI::Set->new; } );
+has nodes     => ( default => sub { PNI::Set->new; } );
+has scenarios => ( default => sub { PNI::Set->new; } );
 
-has file => ( default => sub { PNI::File->new } );
+has file => ( default => sub { PNI::File->new; } );
 
 sub add_edge {
     my $self = shift;
@@ -25,13 +25,13 @@ sub add_edge {
 sub add_node {
     my $self = shift;
 
-    my $type = shift || 'PNI::Node';
+    my $type = shift or return;
 
     my $node_class = "PNI::Node::$type";
 
     $node_class->require or return;
 
-    my $node = $node_class->new( father => $self, type => $type, @_ );
+    my $node = $node_class->new( type => $type, @_ );
 
     return $self->nodes->add($node);
 }
@@ -40,6 +40,7 @@ sub add_scenario {
     my $self = shift;
 
     my $scenario = PNI::Scenario->new(@_);
+
     return $self->scenarios->add($scenario);
 }
 
@@ -59,6 +60,7 @@ sub del_node {
 
     my $node = shift or return;
 
+    # Remove every edge connected to node.
     $self->del_edge($_) for $node->get_ins_edges;
     $self->del_edge($_) for $node->get_outs_edges;
 
@@ -98,9 +100,15 @@ sub task {
         # Discard nodes that run their task yet.
         next if $has_run_task_of{$node};
 
+        # Compute node parents, i.e. nodes that has some out slot
+        # connected to an in slot of the node.
+        my @parent_nodes =
+          map { $_->node } map { $_->source } $node->get_ins_edges;
+
         # Nodes with no parents will skip this for loop,
         # so their task will run before their children.
-        for my $parent_node ( $node->parents ) {
+        for my $parent_node (@parent_nodes) {
+
             $node->off if $parent_node->is_off;
 
             # Wait until all parent nodes run.
@@ -133,15 +141,9 @@ sub task {
         $has_run_task_of{$node} or goto RUN_TASKS;
     }
 
-    # At this point all tasks are run so reset all slots "changed" flag.
-    #for my $node ( $self->get_nodes ) {
-    #    $_->set( changed => 0 ) for ( $node->get_inputs, $node->get_outputs );
-    #}
-
     # Finally, run all sub scenarios tasks.
     $_->task for ( $self->scenarios->list );
 
-    # TODO dovrei mettere un return piu significativo tipo return $self->ok
     return 1;
 }
 
@@ -154,13 +156,15 @@ sub to_hash {
         push @{$nodes_list}, $node->to_hash;
     }
 
-    # TODO prima dovrei prendere il SUPER to_hash
-    # ad esempio PNI::Elem to_hash mi da l' id.
+    my $edges_list = [];
+    for my $edge ( $self->edges->list ) {
+        push @{$edges_list}, $edge->to_hash;
+    }
+
     return {
-        id        => $self->id,
-        nodes     => $nodes_list,
-        edges     => 0,
-        scenarios => 0,
+        id    => $self->id,
+        nodes => $nodes_list,
+        edges => $edges_list,
     };
 }
 
@@ -174,31 +178,18 @@ PNI::Scenario - is a set of nodes connected by edges
 
 =head1 SYNOPSIS
 
-    # You can call the constructor to get a scenario ...
     use PNI::Scenario;
-    $standalone_scenario = PNI::Scenario->new;
-
-    # ... but it will not belong to PNI hierarchy tree,
-    # so its task method will not be called, unless you call it.
-    $standalone_scenario->task;
-
-    # You can start adding a scenario to the PNI root.
-    use PNI;
-    my $scenario = PNI::root->add_scenario;
+    my $scenario = PNI::Scenario->new;
 
     # Add two nodes.
     my $foo = $scenario->add_node('Foo');
     my $bar = $scenario->add_node('Bar');
 
     # Connect nodes with an edge.
-    $scenario->add_edge( $foo => $bar, 'out' => 'in' );
+    $scenario->add_edge( source => $foo->out, target => $bar->in );
 
-    # Calling PNI task method will execute all the tasks once.
-    PNI::task;
-
-    # Or call PNI loop to keep it running.
-    PNI::loop;
-
+    # Run your task.
+    $scenario->task;
 
 =head1 DESCRIPTION
 

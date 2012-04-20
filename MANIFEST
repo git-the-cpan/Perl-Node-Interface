@@ -2,6 +2,7 @@ bin/pni
 bin/pni.pod
 Changes
 lib/PNI.pm
+lib/PNI/Command/daemon.pm
 lib/PNI/Edge.pm
 lib/PNI/Elem.pm
 lib/PNI/File.pm
@@ -80,10 +81,6 @@ lib/PNI/Node/Perlvar/Basetime.pm
 lib/PNI/Node/Perlvar/Osname.pm
 lib/PNI/Node/Perlvar/Perl_version.pm
 lib/PNI/Node/Perlvar/Process_id.pm
-lib/PNI/Node/PNI/Comment.pm
-lib/PNI/Node/PNI/Node.pm
-lib/PNI/Node/PNI/Root.pm
-lib/PNI/Node/PNI/Scenario.pm
 lib/PNI/Node/Scalar/Util/Blessed.pm
 lib/PNI/Out.pm
 lib/PNI/Scenario.pm
@@ -98,10 +95,10 @@ t/_edge.t
 t/_elem.t
 t/_file.t
 t/_finder.t
+t/_gui.t
 t/_in.t
 t/_node.t
 t/_out.t
-t/_pni.t
 t/_scenario.t
 t/_set.t
 t/_slot.t
@@ -153,12 +150,9 @@ t/node/perlvar-basetime.t
 t/node/perlvar-osname.t
 t/node/perlvar-perl_version.t
 t/node/perlvar-process_id.t
-t/node/pni-comment.t
-t/node/pni-node.t
-t/node/pni-root.t
-t/node/pni-scenario.t
 t/node/scalar-util-blessed.t
 t/perlcriticrc
+t/PNI/Node/Empty.pm
 t/PNI/Node/Error.pm
 t/PNI/Node/Twice.pm
 META.yml                                 Module YAML meta-data (added by MakeMaker)

@@ -4,6 +4,7 @@ use PNI::Mo;
 use File::Basename;
 use File::Find;
 use File::Spec;
+
 use Module::Pluggable
   search_path => 'PNI::Node',
   require     => 1,
@@ -47,7 +48,7 @@ PNI::Finder - searches for available nodes
 
 =head1 SYNOPSIS
 
-    my $find = PNI::Finder->instance;
+    my $find = PNI::Finder->new;
     my @node_list = $find->nodes;
     my @pni_files = $find->files;
 

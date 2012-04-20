@@ -10,9 +10,6 @@ WriteMakefile(
     EXE_FILES => ['bin/pni'],
     NAME      => 'Perl-Node-Interface',
     PREREQ_PM => {
-        'Carp'                  => 0,
-        'English'               => 0,
-        'Exporter'              => 0,
         'File::Find'            => 0,
         'File::Temp'            => 0,
         'File::Spec::Functions' => 0,
@@ -22,7 +19,6 @@ WriteMakefile(
         'Mojolicious'           => 0,
         'Scalar::Util'          => 0,
         'Test::More'            => 0,
-        'Time::HiRes'           => 0,
         'UNIVERSAL::require'    => 0,
     },
     test         => { TESTS => 't/*.t t/node/*.t' },
