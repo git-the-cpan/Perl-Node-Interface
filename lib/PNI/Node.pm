@@ -6,21 +6,15 @@ use PNI::In;
 use PNI::Out;
 use PNI::Set;
 
-has _on => ( default => sub { 1 } );
+my %id_from_label_map;
 
-has ins => ( default => sub { PNI::Set->new } );
-has label => ();
-has outs  => ( default => sub { PNI::Set->new } );
-has type  => ();
+has _on => ( default => sub { return 1; } );
 
-# TODO documenta  aggiungi test per x e y: anche se sono attributi grafici devo metterli nel model
-#       per fare in modo che in futuro un' altra persona che sta editando la patch possa
-#       vedere i cambiamenti, cioe che sia collaborativa, questo perchè il controller potrebbe interrogare
-#       un' istanza di PNI su un' altra macchina ... AD OGNI MODO RISULTA PIU FACILE COSI (mi sembra anche piu logico ... cosa diranno
-#       i puristi dei pattern ? :)
-#
-has x => ( default => sub { 0 } );
-has y => ( default => sub { 0 } );
+has ins  => ( default => sub { return PNI::Set->new; } );
+has outs => ( default => sub { return PNI::Set->new; } );
+has type => ();
+has x    => ();
+has y    => ();
 
 sub get_outs_edges {
     return map { $_->edges->list } shift->outs->list;
@@ -32,18 +26,27 @@ sub get_ins_edges {
 
 sub in {
     my $self = shift;
-    my $id = shift || 'in';
+    my $label = shift || 'in';
 
-    # If id is a number, prefix it with 'in'.
-    $id =~ /^\d*$/ and $id = 'in' . $id;
+    # If "label" is a number, prefix it with 'in'.
+    $label =~ /^\d*$/ and $label = 'in' . $label;
 
-    return $self->ins->elem->{$id}
-      || $self->ins->add(
-        PNI::In->new(
-            node => $self,
-            id   => $id,
-        )
-      );
+    if ( my $id = $id_from_label_map{ $self->id }{$label} ) {
+
+        return $self->ins->elem->{$id};
+    }
+    else {
+        my $in = PNI::In->new(
+            label => $label,
+            node  => $self,
+        );
+
+        $self->ins->add($in);
+
+        $id_from_label_map{ $self->id }{$label} = $in->id;
+
+        return $in;
+    }
 }
 
 sub is_off { return !shift->_on; }
@@ -56,46 +59,49 @@ sub on { return shift->_on(1); }
 
 sub out {
     my $self = shift;
-    my $id = shift || 'out';
+    my $label = shift || 'out';
 
-    # If id is a number, prefix it with 'out'.
-    $id =~ /^\d*$/ and $id = 'out' . $id;
+    # If "label" is a number, prefix it with 'out'.
+    $label =~ /^\d*$/ and $label = 'out' . $label;
 
-    return $self->outs->elem->{$id}
-      || $self->outs->add(
-        PNI::Out->new(
-            node => $self,
-            id   => $id,
-        )
-      );
+    if ( my $id = $id_from_label_map{ $self->id }{$label} ) {
+
+        return $self->outs->elem->{$id};
+    }
+    else {
+        my $out = PNI::Out->new(
+            label => $label,
+            node  => $self,
+        );
+
+        $self->outs->add($out);
+
+        $id_from_label_map{ $self->id }{$label} = $out->id;
+
+        return $out;
+    }
 }
 
 # This method is abstract.
 sub task { die; }
 
-# TODO this method is EXPERIMENTAL, needs tests and code cleaning.
-sub to_hash {
+sub to_hashref {
     my $self = shift;
-
-    my @ins_list;
-    for my $in ( $self->ins->list ) {
-        push @ins_list, $in->id;
-    }
-
-    my @outs_list;
-    for my $out ( $self->outs->list ) {
-        push @outs_list, $out->id;
-    }
 
     return {
         id    => $self->id,
         label => $self->label,
-        type  => $self->type,
-        ins   => \@ins_list,
-        outs  => \@outs_list,
+        ins   => [ $self->ins->ids ],
+        outs  => [ $self->outs->ids ],
         x     => $self->x,
         y     => $self->y,
     };
+}
+
+sub DESTROY {
+    my $self = shift;
+
+    delete $id_from_label_map{ $self->id };
 }
 
 1;
@@ -224,9 +230,11 @@ If you pass digit C<x> as output_name, it will be replaced by C<outx>.
 This is an abstract method that must be implemented by every class that extends L<PNI::Node>.
 It is the chunk of code that the node implements.
 
-=head2 to_hash
+=head2 to_hashref
 
-    my $data_hashref = $node->to_hash;
+    my $node_hashref = $node->to_hashref;
+
+Returns an hash ref representing the node.
 
 =cut
 

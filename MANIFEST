@@ -5,9 +5,10 @@ lib/PNI.pm
 lib/PNI/Command/daemon.pm
 lib/PNI/Edge.pm
 lib/PNI/Elem.pm
-lib/PNI/File.pm
 lib/PNI/Finder.pm
 lib/PNI/GUI.pm
+lib/PNI/GUI/Edge.pm
+lib/PNI/GUI/Node.pm
 lib/PNI/GUI/public/css/black-tie/images/ui-bg_diagonals-thick_8_333333_40x40.png
 lib/PNI/GUI/public/css/black-tie/images/ui-bg_flat_65_ffffff_40x100.png
 lib/PNI/GUI/public/css/black-tie/images/ui-bg_glass_40_111111_1x400.png
@@ -31,11 +32,14 @@ lib/PNI/GUI/public/js/jquery-ui-1.8.18.custom.min.js
 lib/PNI/GUI/public/js/kinetic-v3.8.5.min.js
 lib/PNI/GUI/public/js/onload.js
 lib/PNI/GUI/public/js/pni.js
+lib/PNI/GUI/public/js/require.js
+lib/PNI/GUI/public/js/Three.js
 lib/PNI/GUI/public/pni.ico
 lib/PNI/GUI/Scenario.pm
 lib/PNI/GUI/templates/MainWindow.html.ep
 lib/PNI/GUI/templates/not_found.html.ep
 lib/PNI/Guides.pod
+lib/PNI/Guides/FAQ.pod
 lib/PNI/Guides/Scripting.pod
 lib/PNI/In.pm
 lib/PNI/Mo.pm
@@ -43,6 +47,8 @@ lib/PNI/Node.pm
 lib/PNI/Node/File/Spec/Catfile.pm
 lib/PNI/Node/File/Spec/Devnull.pm
 lib/PNI/Node/File/Spec/Tmpdir.pm
+lib/PNI/Node/JS/THREE/Scene.js
+lib/PNI/Node/JS/THREE/Scene.pm
 lib/PNI/Node/List/Util/Max.pm
 lib/PNI/Node/List/Util/Maxstr.pm
 lib/PNI/Node/List/Util/Min.pm
@@ -84,7 +90,6 @@ lib/PNI/Node/Perlvar/Process_id.pm
 lib/PNI/Node/Scalar/Util/Blessed.pm
 lib/PNI/Out.pm
 lib/PNI/Scenario.pm
-lib/PNI/Scenario/welcome.pni
 lib/PNI/Set.pm
 lib/PNI/Slot.pm
 Makefile.PL
@@ -93,7 +98,6 @@ README.pod
 t/__use_ok.t
 t/_edge.t
 t/_elem.t
-t/_file.t
 t/_finder.t
 t/_gui.t
 t/_in.t
@@ -108,7 +112,6 @@ t/all_critics_ok_for_nodes.t
 t/all_critics_ok_for_tests.t
 t/all_pod_files_ok.t
 t/every_node_has_a_test.t
-t/first_file.pni
 t/no_PAUSE_indexing.t
 t/node/file-spec-catfile.t
 t/node/file-spec-devnull.t

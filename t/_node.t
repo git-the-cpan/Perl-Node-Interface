@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 24;
 use PNI;
 use PNI::Node;
 use PNI::Scenario;
@@ -15,26 +15,39 @@ is $node->get_ins_edges,  0,     'default get_ins_edges';
 is $node->get_outs_edges, 0,     'default get_outs_edges';
 is $node->label,          undef, 'default label';
 is $node->type,           undef, 'default type';
+is $node->x,              undef, 'default x';
+is $node->y,              undef, 'default y';
 ok !$node->is_off, 'node is_off is false by default';
 ok $node->is_on, 'node is_on by default';
 
 ok my $in = $node->in, 'in constructor';
-is $in->id, 'in', 'default in id';
+is $in->label, 'in', 'default in label';
 isa_ok $in, 'PNI::In';
 is $in, $node->in, 'in accessor';
 
 ok my $out = $node->out, 'out constructor';
-is $out->id, 'out', 'default out id';
+is $out->label, 'out', 'default out label';
 isa_ok $out, 'PNI::Out';
 is $out, $node->out, 'out accessor';
 
+is_deeply $node->to_hashref,
+  {
+    id    => $node->id,
+    label => $node->label,
+    ins   => [ $in->id ],
+    outs  => [ $out->id ],
+    x     => $node->x,
+    y     => $node->y,
+  },
+  'to_hashref';
+
 my $in1 = $node->in(1);
 isa_ok $in1, 'PNI::In', 'in(number)';
-is $in1->id, 'in1', 'in1';
+is $in1->label, 'in1', 'in(number) label';
 
 my $out2 = $node->out(2);
 isa_ok $out2, 'PNI::Out', 'out(number)';
-is $out2->id, 'out2', 'out2';
+is $out2->label, 'out2', 'out(number) label';
 
 my $scen = PNI::Scenario->new;
 

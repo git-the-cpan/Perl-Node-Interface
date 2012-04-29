@@ -14,6 +14,9 @@ sub startup {
     $self->static->paths->[0]   = $self->home->rel_dir('public');
     $self->renderer->paths->[0] = $self->home->rel_dir('templates');
 
+    # Add PNI Javascript node path as a static dir.
+    $self->static->paths->[1] = catdir( dirname(__FILE__), 'Node', 'JS' );
+
     my $r = $self->routes;
     $r->get('/')->to( cb => sub { shift->render('MainWindow') } );
     $r->get('/node_list')->to(
@@ -23,13 +26,13 @@ sub startup {
         }
     );
 
-    $r->get('/scenario/create')->to('scenario#create');
-    $r->get('/scenario/:scenario_id/')->to('scenario#to_json');
-    $r->get('/scenario/:scenario_id/add_edge')->to('scenario#add_edge');
-    $r->get('/scenario/:scenario_id/add_node')->to('scenario#add_node');
-    $r->get('/scenario/:scenario_id/edge/:edge_id')->to('scenario#get_edge');
-    $r->get('/scenario/:scenario_id/node/:node_id')->to('scenario#get_node');
-    $r->get('/scenario/:scenario_id/slot/:slot_id')->to('scenario#get_slot');
+    $r->get('/edge/:edge_id')->to('edge#to_json');
+    $r->post('/edge')->to('scenario#add_edge');
+
+    $r->get('/node/:node_id')->to('node#to_json');
+    $r->post('/node')->to('scenario#add_node');
+
+    $r->get('/scenario')->to('scenario#to_json');
 
 }
 
@@ -48,6 +51,24 @@ Talking with MVC terms, code outside the PNI::GUI namespace builds the Model.
 Perl code inside PNI::GUI belongs to the Controller, everything else (HTML/CSS/JavaScript) is part of the View. 
 
 =head1 ROUTES
+
+=head2 DEL /edge/:edge_id
+
+=head2 GET /edge/:edge_id
+
+=head2 PUT /edge
+
+=head2 DEL /node/:node_id
+
+=head2 GET /node/:node_id
+
+=head2 PUT /node
+
+=head2 DEL /scenario/:scenario_id
+
+=head2 GET /scenario/:scenario_id
+
+=head2 PUT /scenario
 
 =cut
 

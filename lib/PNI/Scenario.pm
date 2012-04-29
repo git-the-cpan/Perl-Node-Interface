@@ -3,7 +3,6 @@ use PNI::Mo;
 extends 'PNI::Node';
 
 use PNI::Edge;
-use PNI::File;
 use PNI::Node;
 use PNI::Set;
 
@@ -12,8 +11,6 @@ require UNIVERSAL::require;
 has edges     => ( default => sub { PNI::Set->new; } );
 has nodes     => ( default => sub { PNI::Set->new; } );
 has scenarios => ( default => sub { PNI::Set->new; } );
-
-has file => ( default => sub { PNI::File->new; } );
 
 sub add_edge {
     my $self = shift;
@@ -147,24 +144,29 @@ sub task {
     return 1;
 }
 
-# TODO this method is EXPERIMENTAL, needs tests and code cleaning.
-sub to_hash {
+sub to_hashref {
     my $self = shift;
-
-    my $nodes_list = [];
-    for my $node ( $self->nodes->list ) {
-        push @{$nodes_list}, $node->to_hash;
-    }
 
     my $edges_list = [];
     for my $edge ( $self->edges->list ) {
-        push @{$edges_list}, $edge->to_hash;
+        push @{$edges_list}, $edge->to_hashref;
+    }
+
+    my $nodes_list = [];
+    for my $node ( $self->nodes->list ) {
+        push @{$nodes_list}, $node->to_hashref;
+    }
+
+    my $scenarios_list = [];
+    for my $scenario ( $self->scenarios->list ) {
+        push @{$scenarios_list}, $scenario->to_hashref;
     }
 
     return {
-        id    => $self->id,
-        nodes => $nodes_list,
-        edges => $edges_list,
+        id        => $self->id,
+        edges     => $edges_list,
+        nodes     => $nodes_list,
+        scenarios => $scenarios_list,
     };
 }
 
@@ -238,9 +240,11 @@ A L<PNI::Set> containing <PNI::Scenario>s.
 Probably the most important PNI method. The task of a scenario is to trigger 
 every node (and scenario) it contains to run its own task, following the natural order.
 
-=head2 to_hash
+=head2 to_hashref
 
-    my $data_hashref = $scen->to_hash;
+    my $scenario_hashref = $scen->to_hashref;
+
+Returns an hash ref representing the scenario.
 
 =cut
 
