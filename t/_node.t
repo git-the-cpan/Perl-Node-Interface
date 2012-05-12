@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 24;
+use Test::More tests => 28;
 use PNI;
 use PNI::Node;
 use PNI::Scenario;
@@ -30,14 +30,37 @@ is $out->label, 'out', 'default out label';
 isa_ok $out, 'PNI::Out';
 is $out, $node->out, 'out accessor';
 
+my $type  = 'Foo';
+my $label = 'bar';
+my $x     = 10;
+my $y     = 20;
+$node->label($label);
+$node->type($type);
+$node->x($x);
+$node->y($y);
+
+my $node_id = $node->id;
+
+my @ins_to_hashref;
+my @outs_to_hashref;
+
+#$in1->data( [qw(foo bar)] );
+#$out2->data( { foo => 'bar' } );
+
+push @ins_to_hashref,  $in->to_hashref;
+#push @ins_to_hashref,  $in1->to_hashref;
+push @outs_to_hashref, $out->to_hashref;
+#push @outs_to_hashref, $out2->to_hashref;
+
 is_deeply $node->to_hashref,
   {
-    id    => $node->id,
-    label => $node->label,
-    ins   => [ $in->id ],
-    outs  => [ $out->id ],
-    x     => $node->x,
-    y     => $node->y,
+    id    => $node_id,
+    label => $label,
+    ins   => \@ins_to_hashref,
+    outs  => \@outs_to_hashref,
+    type  => $type,
+    x     => $x,
+    y     => $y,
   },
   'to_hashref';
 
@@ -48,6 +71,13 @@ is $in1->label, 'in1', 'in(number) label';
 my $out2 = $node->out(2);
 isa_ok $out2, 'PNI::Out', 'out(number)';
 is $out2->label, 'out2', 'out(number) label';
+
+is PNI::Node::by_id($node_id), $node, 'by_id';
+is PNI::Node::by_id(-1), undef, 'by_id checks id';
+is PNI::Node::by_id( $in1->id ), undef, 'by_id checks type';
+
+$node->DESTROY;
+is undef, PNI::Node::by_id($node_id), 'DESTROY';
 
 my $scen = PNI::Scenario->new;
 

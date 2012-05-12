@@ -36,10 +36,12 @@ lib/PNI/GUI/public/js/require.js
 lib/PNI/GUI/public/js/Three.js
 lib/PNI/GUI/public/pni.ico
 lib/PNI/GUI/Scenario.pm
+lib/PNI/GUI/Slot.pm
 lib/PNI/GUI/templates/MainWindow.html.ep
 lib/PNI/GUI/templates/not_found.html.ep
 lib/PNI/Guides.pod
 lib/PNI/Guides/FAQ.pod
+lib/PNI/Guides/GettingStarted.pod
 lib/PNI/Guides/Scripting.pod
 lib/PNI/In.pm
 lib/PNI/Mo.pm
@@ -55,6 +57,7 @@ lib/PNI/Node/List/Util/Min.pm
 lib/PNI/Node/List/Util/Minstr.pm
 lib/PNI/Node/List/Util/Sum.pm
 lib/PNI/Node/Mo.pm
+lib/PNI/Node/Perldata/Scalar.pm
 lib/PNI/Node/Perlfunc/Cos.pm
 lib/PNI/Node/Perlfunc/Exp.pm
 lib/PNI/Node/Perlfunc/Int.pm
@@ -87,7 +90,11 @@ lib/PNI/Node/Perlvar/Basetime.pm
 lib/PNI/Node/Perlvar/Osname.pm
 lib/PNI/Node/Perlvar/Perl_version.pm
 lib/PNI/Node/Perlvar/Process_id.pm
+lib/PNI/Node/PNI/VERSION.pm
 lib/PNI/Node/Scalar/Util/Blessed.pm
+lib/PNI/Node/Scalar/Util/Looks_like_number.pm
+lib/PNI/Node/Scalar/Util/Refaddr.pm
+lib/PNI/Node/Scalar/Util/Reftype.pm
 lib/PNI/Out.pm
 lib/PNI/Scenario.pm
 lib/PNI/Set.pm
@@ -121,6 +128,7 @@ t/node/list-util-maxstr.t
 t/node/list-util-min.t
 t/node/list-util-minstr.t
 t/node/list-util-sum.t
+t/node/perldata-scalar.t
 t/node/perlfunc-cos.t
 t/node/perlfunc-exp.t
 t/node/perlfunc-int.t

@@ -32,17 +32,12 @@
       },
       "runtime" : {
          "requires" : {
-            "File::Find" : 0,
-            "File::Spec::Functions" : 0,
-            "List::Util" : 0,
             "Module::Pluggable" : 0,
             "Mojolicious" : "2.85",
-            "Scalar::Util" : 0,
-            "Test::More" : 0,
             "UNIVERSAL::require" : 0
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.33"
+   "version" : "0.34"
 }

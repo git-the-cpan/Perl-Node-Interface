@@ -1,7 +1,9 @@
 use strict;
 use warnings;
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Mojo;
+
+use PNI::Scenario;
 
 # Use some test nodes, under t/PNI/Node path.
 use lib 't';
@@ -27,13 +29,16 @@ $t->get_ok('/')
   ->content_type_is('text/html;charset=UTF-8')
 
   # Check title.
-  #->text_is( 'html head title' => 'Perl Node Interface', 'title' )
+  ->text_is( 'html head title' => 'Perl Node Interface', 'title' )
 
   # End of Main Window tests.
   ;
 
 # GET /scenario
-$t->get_ok('/scenario')
+
+my $scenario = PNI::Scenario->new;
+
+$t->get_ok( '/scenario/' . $scenario->id )
 
   # Status is ok.
   ->status_is(200)
@@ -45,9 +50,7 @@ $t->get_ok('/scenario')
   ;
 
 # GET /node/:node_id
-use PNI::Scenario;
-my $scenario = PNI::Scenario->new;
-my $node1    = $scenario->add_node('Twice');
+my $node1 = $scenario->add_node('Twice');
 $t->get_ok( '/node/' . $node1->id )
 
   # Status is ok.

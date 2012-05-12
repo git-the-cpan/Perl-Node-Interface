@@ -2,6 +2,8 @@ package PNI::Node;
 use PNI::Mo;
 extends 'PNI::Elem';
 
+use PNI::Elem;
+
 use PNI::In;
 use PNI::Out;
 use PNI::Set;
@@ -15,6 +17,17 @@ has outs => ( default => sub { return PNI::Set->new; } );
 has type => ();
 has x    => ();
 has y    => ();
+
+sub by_id {
+    my $elem = PNI::Elem::by_id(@_);
+
+    if ( defined $elem and $elem->isa('PNI::Node') ) {
+        return $elem;
+    }
+    else {
+        return;
+    }
+}
 
 sub get_outs_edges {
     return map { $_->edges->list } shift->outs->list;
@@ -32,7 +45,6 @@ sub in {
     $label =~ /^\d*$/ and $label = 'in' . $label;
 
     if ( my $id = $id_from_label_map{ $self->id }{$label} ) {
-
         return $self->ins->elem->{$id};
     }
     else {
@@ -88,18 +100,39 @@ sub task { die; }
 sub to_hashref {
     my $self = shift;
 
+    my @ins_to_hashref;
+    for my $in_id ( $self->ins->ids ) {
+        my $in = PNI::In::by_id($in_id);
+        push @ins_to_hashref, $in->to_hashref;
+    }
+
+    my @outs_to_hashref;
+    for my $out_id ( $self->outs->ids ) {
+        my $out = PNI::Out::by_id($out_id);
+        push @outs_to_hashref, $out->to_hashref;
+    }
+
+    # TODO risolvi la questione del tipo di dati in JSON
+    my $x = $self->x;
+    my $y = $self->y;
+$x += 0;
+$y += 0;
+
     return {
         id    => $self->id,
         label => $self->label,
-        ins   => [ $self->ins->ids ],
-        outs  => [ $self->outs->ids ],
-        x     => $self->x,
-        y     => $self->y,
+        ins   => \@ins_to_hashref,
+        outs  => \@outs_to_hashref,
+        type  => $self->type,
+        x     => $x,
+        y     => $y,
     };
 }
 
 sub DESTROY {
     my $self = shift;
+
+    $self->SUPER::DESTROY;
 
     delete $id_from_label_map{ $self->id };
 }
@@ -114,13 +147,44 @@ PNI::Node - is a basic unit of code
 
 =head1 SYNOPSIS
 
-    # Create a node in a scenario.
-    use PNI::Scenario;
-    my $scen = PNI::Scenario->new;
-    my $node = $scenario->add_node( type => 'Foo::Bar' );
+    # Define "Foo::Bar" node.
+    # in file PNI/Node/Foo/Bar.pm
 
-    # Decorate node, add an input and an output.
-    my $in = $node->in('lead');
+    package PNI::Node::Foo::Bar;
+    use PNI::Node::Mo;
+    extends 'PNI::Node';
+
+    sub BUILD {
+        my $self = shift;
+
+        # Decorate node, add an input and an output.
+        $self->in('lead');
+        $self->out('gold');
+
+    }
+
+    sub task {
+        my $self = shift;
+
+        my $in  = $self->in('lead');
+        my $out = $self->out('gold');
+
+        # Turn lead into gold.
+        ...
+
+          $out->data( $in->data );
+
+    }
+
+    1;
+
+    # Somewhere else in your code.
+
+    # Create a "Foo::Bar" node.
+    use PNI::Node;
+    my $node = PNI::Node->new( type => 'Foo::Bar' );
+
+    my $in  = $node->in('lead');
     my $out = $node->out('gold');
 
     # Fill input data.
@@ -151,6 +215,14 @@ Holds a L<PNI::Set> of <PNI::Out>.
 =head2 type
 
 =head1 METHODS
+
+=head2 by_id
+
+    use PNI::Node;
+
+    my $node = PNI::Node::by_id($node_id);
+
+Given a node id, returns a reference to the node.
 
 =head2 get_ins_edges
 
