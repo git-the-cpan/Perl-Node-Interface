@@ -18,7 +18,8 @@ no_index:
     - t
     - inc
 requires:
+  File::HomeDir: 0
   Module::Pluggable: 0
   Mojolicious: 2.85
   UNIVERSAL::require: 0
-version: 0.34
+version: 0.35

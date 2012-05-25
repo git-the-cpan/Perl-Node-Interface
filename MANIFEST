@@ -42,10 +42,12 @@ lib/PNI/GUI/templates/not_found.html.ep
 lib/PNI/Guides.pod
 lib/PNI/Guides/FAQ.pod
 lib/PNI/Guides/GettingStarted.pod
+lib/PNI/Guides/Installation.pod
 lib/PNI/Guides/Scripting.pod
 lib/PNI/In.pm
 lib/PNI/Mo.pm
 lib/PNI/Node.pm
+lib/PNI/Node/File/HomeDir/My_home.pm
 lib/PNI/Node/File/Spec/Catfile.pm
 lib/PNI/Node/File/Spec/Devnull.pm
 lib/PNI/Node/File/Spec/Tmpdir.pm
@@ -57,6 +59,8 @@ lib/PNI/Node/List/Util/Min.pm
 lib/PNI/Node/List/Util/Minstr.pm
 lib/PNI/Node/List/Util/Sum.pm
 lib/PNI/Node/Mo.pm
+lib/PNI/Node/Perldata/Array.pm
+lib/PNI/Node/Perldata/Hash.pm
 lib/PNI/Node/Perldata/Scalar.pm
 lib/PNI/Node/Perlfunc/Cos.pm
 lib/PNI/Node/Perlfunc/Exp.pm
@@ -67,8 +71,11 @@ lib/PNI/Node/Perlfunc/Lcfirst.pm
 lib/PNI/Node/Perlfunc/Length.pm
 lib/PNI/Node/Perlfunc/Log.pm
 lib/PNI/Node/Perlfunc/Print.pm
+lib/PNI/Node/Perlfunc/Push.pm
+lib/PNI/Node/Perlfunc/Scalar.pm
 lib/PNI/Node/Perlfunc/Sin.pm
 lib/PNI/Node/Perlfunc/Sqrt.pm
+lib/PNI/Node/Perlfunc/Time.pm
 lib/PNI/Node/Perlfunc/Uc.pm
 lib/PNI/Node/Perlfunc/Ucfirst.pm
 lib/PNI/Node/Perlfunc/Values.pm
@@ -90,6 +97,7 @@ lib/PNI/Node/Perlvar/Basetime.pm
 lib/PNI/Node/Perlvar/Osname.pm
 lib/PNI/Node/Perlvar/Perl_version.pm
 lib/PNI/Node/Perlvar/Process_id.pm
+lib/PNI/Node/PNI/Comment.pm
 lib/PNI/Node/PNI/VERSION.pm
 lib/PNI/Node/Scalar/Util/Blessed.pm
 lib/PNI/Node/Scalar/Util/Looks_like_number.pm
@@ -113,13 +121,21 @@ t/_out.t
 t/_scenario.t
 t/_set.t
 t/_slot.t
+t/_use_ok.t
 t/all_critics_ok_for_controller.t
 t/all_critics_ok_for_model.t
 t/all_critics_ok_for_nodes.t
 t/all_critics_ok_for_tests.t
 t/all_pod_files_ok.t
+t/edge.t
+t/elem.t
 t/every_node_has_a_test.t
+t/finder.t
+t/gui.t
+t/in.t
 t/no_PAUSE_indexing.t
+t/node.t
+t/node/file-homedir-my_home.t
 t/node/file-spec-catfile.t
 t/node/file-spec-devnull.t
 t/node/file-spec-tmpdir.t
@@ -128,6 +144,8 @@ t/node/list-util-maxstr.t
 t/node/list-util-min.t
 t/node/list-util-minstr.t
 t/node/list-util-sum.t
+t/node/perldata-array.t
+t/node/perldata-hash.t
 t/node/perldata-scalar.t
 t/node/perlfunc-cos.t
 t/node/perlfunc-exp.t
@@ -138,8 +156,10 @@ t/node/perlfunc-lcfirst.t
 t/node/perlfunc-length.t
 t/node/perlfunc-log.t
 t/node/perlfunc-print.t
+t/node/perlfunc-push.t
 t/node/perlfunc-sin.t
 t/node/perlfunc-sqrt.t
+t/node/perlfunc-time.t
 t/node/perlfunc-uc.t
 t/node/perlfunc-ucfirst.t
 t/node/perlfunc-values.t
@@ -162,9 +182,13 @@ t/node/perlvar-osname.t
 t/node/perlvar-perl_version.t
 t/node/perlvar-process_id.t
 t/node/scalar-util-blessed.t
+t/out.t
 t/perlcriticrc
 t/PNI/Node/Empty.pm
 t/PNI/Node/Error.pm
 t/PNI/Node/Twice.pm
+t/scenario.t
+t/set.t
+t/slot.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)

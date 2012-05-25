@@ -14,8 +14,8 @@ sub startup {
     $self->static->paths->[0]   = $self->home->rel_dir('public');
     $self->renderer->paths->[0] = $self->home->rel_dir('templates');
 
-    # Add PNI Javascript node path as a static dir.
-    $self->static->paths->[1] = catdir( dirname(__FILE__), 'Node', 'JS' );
+    # Add PNI node path as a static dir.
+    $self->static->paths->[1] = catdir( dirname(__FILE__), 'Node' );
 
     my $r = $self->routes;
     $r->get('/')->to( cb => sub { shift->render('MainWindow') } );
@@ -30,9 +30,9 @@ sub startup {
     $r->post('/edge')->to('scenario#add_edge');
 
     $r->get('/node/:node_id')->to('node#to_json');
-    # Questa put dovrebbe essere una post
-    $r->put('/node/:node_id')->to('node#update_position');
     $r->post('/node')->to('scenario#add_node');
+    $r->post('/node/:node_id')->to('node#update_position');
+    $r->delete('/node/:node_id')->to('scenario#del_node');
 
     $r->get('/scenario/:scenario_id')->to('scenario#to_json');
     $r->get('/scenario/:scenario_id/task')->to('scenario#run_task');

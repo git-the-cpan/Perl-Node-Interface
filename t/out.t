@@ -17,10 +17,10 @@ is $out->is_connected, 1, 'is_connected';
 
 my $out_id = $out->id;
 
-is PNI::Out::by_id( $out_id ), $out, 'by_id';
+is PNI::Out::by_id($out_id), $out, 'by_id';
 is PNI::Out::by_id(-1), undef, 'by_id checks id';
 is PNI::Out::by_id( $edge->id ), undef, 'by_id checks type';
 
 $out->DESTROY;
-is PNI::Out::by_id($out_id),undef, 'DESTROY';
+is PNI::Out::by_id($out_id), undef, 'DESTROY';
 

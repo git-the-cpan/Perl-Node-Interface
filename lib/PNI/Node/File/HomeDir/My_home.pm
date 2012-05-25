@@ -1,15 +1,16 @@
 package    # Avoid PAUSE indexing.
-  PNI::Node::PNI::VERSION;
+  PNI::Node::File::HomeDir::My_home;
 use PNI::Node::Mo;
 extends 'PNI::Node';
 
-use PNI;
+use File::HomeDir;
 
 sub BUILD {
     my $self = shift;
-    $self->label('PNI::VERSION');
 
-    $self->out->data('0.34');
+    $self->label('Home');
+
+    $self->out->data( File::HomeDir->my_home );
 }
 
 sub task { }

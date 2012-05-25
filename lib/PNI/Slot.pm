@@ -2,10 +2,19 @@ package PNI::Slot;
 use PNI::Mo;
 extends 'PNI::Elem';
 
-use Scalar::Util;
+use Scalar::Util qw(looks_like_number);
 
-has data => ();
-has node => ();
+has data => ( is => 'rw' );
+has node => ( is => 'ro' );
+
+sub bang {
+    my $self = shift;
+    defined $_[0] or return ${$self->data};
+
+    $self->data( bless \shift, 'BANG' );
+}
+
+sub is_bang { return shift->type eq 'BANG' ? 1 : 0; }
 
 sub is_array { return shift->type eq 'ARRAY' ? 1 : 0; }
 
@@ -15,7 +24,7 @@ sub is_defined { return defined( shift->data ); }
 
 sub is_hash { return shift->type eq 'HASH' ? 1 : 0; }
 
-sub is_number { return Scalar::Util::looks_like_number( shift->data ) ? 1 : 0; }
+sub is_number { return looks_like_number( shift->data ) ? 1 : 0; }
 
 sub is_scalar { return shift->type eq 'SCALAR' ? 1 : 0; }
 
@@ -33,7 +42,8 @@ sub to_hashref {
 
     return {
         id   => $self->id,
-        data => $self->data
+        data => $self->data,
+        type => $self->type
     };
 }
 
@@ -115,4 +125,6 @@ Returns a string representing the slot data type, i.e. UNDEF, SCALAR or the
 return value of C<ref> function applyed to the value of the C<data> attribute..
 
 =cut
+
+
 

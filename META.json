@@ -32,6 +32,7 @@
       },
       "runtime" : {
          "requires" : {
+            "File::HomeDir" : 0,
             "Module::Pluggable" : 0,
             "Mojolicious" : "2.85",
             "UNIVERSAL::require" : 0
@@ -39,5 +40,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.34"
+   "version" : "0.35"
 }

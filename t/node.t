@@ -47,9 +47,11 @@ my @outs_to_hashref;
 #$in1->data( [qw(foo bar)] );
 #$out2->data( { foo => 'bar' } );
 
-push @ins_to_hashref,  $in->to_hashref;
+push @ins_to_hashref, $in->to_hashref;
+
 #push @ins_to_hashref,  $in1->to_hashref;
 push @outs_to_hashref, $out->to_hashref;
+
 #push @outs_to_hashref, $out2->to_hashref;
 
 is_deeply $node->to_hashref,
